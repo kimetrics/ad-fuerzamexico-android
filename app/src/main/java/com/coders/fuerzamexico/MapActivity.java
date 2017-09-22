@@ -85,6 +85,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap = googleMap;
         mapReady = true;
         mClusterManager = new ClusterManager<ClusterMarker>(this, mMap);
+        mMap.setOnMarkerClickListener(mClusterManager);
         mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
             public void onMyLocationChange(Location location) {
@@ -105,6 +106,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 l.setLongitude(mMap.getCameraPosition().target.longitude);
                 currentLocation = l;
                 queryGeo();
+                mClusterManager.onCameraIdle();
             }
         });
 
@@ -119,40 +121,28 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private ArrayList<String> markers = new ArrayList<>();
     ClusterManager<ClusterMarker> mClusterManager;
-    LatLngBounds.Builder builder = new LatLngBounds.Builder();
 
     private void addMarker(Report report, String uuid){
         if(mapReady){
 
-            /*mMap.setOnMarkerClickListener(mClusterManager);
-            mMap.setOnCameraIdleListener(mClusterManager);
-            mMap.setOnMarkerClickListener(mClusterManager);
-            mMap.setOnInfoWindowClickListener(mClusterManager);*/
-
-            final ClusterMarker clusterMarker = new ClusterMarker(report.getGeo().latitude, report.getGeo().longitude,
-                    uuid);
-            mClusterManager.addItem(clusterMarker);
-            builder.include(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
-
             if(!markers.contains(uuid)) {
-                MarkerOptions marker = new MarkerOptions().position(report.getGeo()).title(report.getName());
+                final ClusterMarker clusterMarker =
+                        new ClusterMarker(report.getGeo().latitude, report.getGeo().longitude, uuid);
+                mClusterManager.addItem(clusterMarker);
                 markers.add(uuid);
-                mMap.addMarker(marker).setTag(uuid);
-                System.out.println(markers.size());
+                Log.e("SIZE", String.valueOf(markers.size()));
             }
 
-            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            mClusterManager.setOnClusterItemClickListener(new ClusterManager.OnClusterItemClickListener<ClusterMarker>() {
                 @Override
-                public boolean onMarkerClick(Marker marker) {
-                    String mUUID = marker.getTag().toString();
-                    Toast.makeText(MapActivity.this, mUUID, Toast.LENGTH_SHORT).show();
-                    return false;
+                public boolean onClusterItemClick(ClusterMarker clusterMarker) {
+                    String mUUID = clusterMarker.getSomeID();
+
+                    return true;
                 }
             });
 
-            LatLngBounds bounds = builder.build();
-            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, 230);
-            mMap.animateCamera(cu);
+            mClusterManager.cluster();
 
         }else {
             reportsPendingToAdd.add(report);
