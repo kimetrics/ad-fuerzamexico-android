@@ -10,8 +10,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.coders.fuerzamexico.R;
-import com.coders.fuerzamexico.steps.incidence.IncidenceAdapter;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 

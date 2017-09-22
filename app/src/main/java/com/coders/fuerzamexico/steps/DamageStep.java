@@ -9,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.coders.fuerzamexico.R;
-import com.coders.fuerzamexico.steps.incidence.IncidenceItem;
 import com.coders.fuerzamexico.steps.singleadapter.OnSingleItemListener;
 import com.coders.fuerzamexico.steps.singleadapter.SingleItem;
 import com.coders.fuerzamexico.steps.singleadapter.SingleItemAdapter;

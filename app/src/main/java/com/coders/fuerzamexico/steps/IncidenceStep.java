@@ -6,13 +6,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 
 import com.coders.fuerzamexico.R;
 import com.coders.fuerzamexico.steps.incidence.IncidenceAdapter;
 import com.coders.fuerzamexico.steps.incidence.IncidenceItem;
 import com.coders.fuerzamexico.steps.incidence.OnIncidenceClickListener;
-import com.coders.fuerzamexico.steps.singleadapter.SingleItem;
 import com.github.fcannizzaro.materialstepper.AbstractStep;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

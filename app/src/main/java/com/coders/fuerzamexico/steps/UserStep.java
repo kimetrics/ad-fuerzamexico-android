@@ -1,12 +1,10 @@
 package com.coders.fuerzamexico.steps;
 
-import android.location.Address;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.TextView;
 
 import com.coders.fuerzamexico.R;
 import com.github.fcannizzaro.materialstepper.AbstractStep;

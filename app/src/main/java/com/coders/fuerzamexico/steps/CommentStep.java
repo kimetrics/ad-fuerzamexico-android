@@ -1,16 +1,12 @@
 package com.coders.fuerzamexico.steps;
 
 import android.location.Address;
-import android.location.Location;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
-import android.widget.Toast;
 
-import com.coders.fuerzamexico.MainActivity;
 import com.coders.fuerzamexico.R;
 import com.coders.fuerzamexico.steps.incidence.IncidenceItem;
 import com.coders.fuerzamexico.steps.singleadapter.SingleItem;
