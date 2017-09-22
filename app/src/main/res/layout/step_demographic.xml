@@ -23,6 +23,7 @@
             android:layout_height="match_parent">
 
             <LinearLayout
+                android:visibility="gone"
                 android:padding="10dp"
                 android:orientation="vertical"
                 android:layout_width="match_parent"

@@ -37,7 +37,6 @@ public class DemographicStep extends AbstractStep{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.step_demographic, container, false);
         txtNumHabitants = v.findViewById(R.id.txtNumHabitants);
-        txtNumHabitants.setVisibility(View.GONE);
         txtNumVictims = v.findViewById(R.id.txtNumVictims);
         txtNumDead = v.findViewById(R.id.txtNumDead);
 
