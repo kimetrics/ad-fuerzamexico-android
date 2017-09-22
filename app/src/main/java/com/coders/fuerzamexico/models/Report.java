@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,26 +15,26 @@ import java.util.Map;
 public class Report<V, K> {
     public String topic;
     public String time;
-    public String status;
+    public long status;
+    public LatLng latLng;
     public Map<V, K> reportedBy;
     public Map<V, K> address;
     public Map<V, K> form;
 
 
-    public Report(HashMap dataMap){
+    public Report(HashMap dataMap) throws ClassCastException, NullPointerException{
         topic = (String) dataMap.get("type");
         time = (String) dataMap.get("topic");
-        status = (String) dataMap.get("status");
+        status = (Long) dataMap.get("status");
         reportedBy = (HashMap) dataMap.get("reported_by");
         address = (HashMap) dataMap.get("address");
         form = (HashMap) dataMap.get("form");
+        ArrayList<Double> geo = (ArrayList) dataMap.get("l");
+        latLng = new LatLng(geo.get(0), geo.get(1));
     }
 
     public LatLng getGeo(){
-        HashMap geo = (HashMap) address.get("geo");
-        Double latitude = (Double) geo.get("lat");
-        Double longitude = (Double) geo.get("lon");
-        return new LatLng(latitude, longitude);
+        return latLng;
     }
 
     public String getName() {
@@ -41,19 +42,5 @@ public class Report<V, K> {
             return topic;
         }
         return "";
-    }
-
-    public boolean hasGeo() {
-        if(address != null){
-            HashMap geo = (HashMap) address.get("geo");
-            Double latitude = (Double) geo.get("lat");
-            Double longitude = (Double) geo.get("lon");
-
-            if(latitude != null && longitude != null){
-                Log.e("GEO:", latitude.toString() + ", " + longitude.toString());
-                return true;
-            }
-        }
-        return false;
     }
 }
