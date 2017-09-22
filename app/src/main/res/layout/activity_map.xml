@@ -14,37 +14,69 @@
     <FrameLayout
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:background="#90000000"
+        android:layout_height="wrap_content"
+        android:background="#95000000"
         android:padding="10dp">
 
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="left"
             android:src="@mipmap/ic_launcher"/>
 
-        <TextView
+        <LinearLayout
+            android:orientation="vertical"
             android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:textSize="20sp"
+                android:textColor="#FFF"
+                android:fontFamily="sans-serif-condensed"
+                android:text="#FuerzaMEXICO"/>
+
+            <TextView
+                android:id="@+id/lbVisualizations"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="5dp"
+                android:textColor="#FFFFFF"
+                android:fontFamily="sans-serif-condensed"
+                android:text="Incidencias visualizadas: 0"
+                android:layout_below="@id/toolbar"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/btIcons"
+            android:orientation="vertical"
+            android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center"
-            android:textSize="20sp"
-            android:textColor="#FFF"
-            android:fontFamily="sans-serif-condensed"
-            android:text="#FuerzaMEXICO"/>
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_gravity="right">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_heart_box_white_24dp"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-condensed"
+                android:textColor="#FFF"
+                android:gravity="center"
+                android:text="Íconos"/>
+
+        </LinearLayout>
 
     </FrameLayout>
-
-    <TextView
-        android:id="@+id/lbVisualizations"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#90000000"
-        android:gravity="center"
-        android:padding="5dp"
-        android:textColor="#FFFFFF"
-        android:fontFamily="sans-serif-condensed"
-        android:text="Incidencias visualizadas: 0"
-        android:layout_below="@id/toolbar"/>
 
     <android.support.design.widget.FloatingActionButton
         android:layout_width="wrap_content"

@@ -20,6 +20,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.coders.fuerzamexico.models.ClusterMarker;
@@ -68,12 +69,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private boolean mapReady;
     private SupportMapFragment mapFragment;
     private TextView lbVisualizations;
+    private LinearLayout btIcons;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        btIcons = (LinearLayout)findViewById(R.id.btIcons);
         lbVisualizations = (TextView)findViewById(R.id.lbVisualizations);
         mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -83,6 +86,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             public void onClick(View view) {
                 Intent intent = new Intent(MapActivity.this, MainActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        btIcons.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), IconsActivity.class));
             }
         });
 
