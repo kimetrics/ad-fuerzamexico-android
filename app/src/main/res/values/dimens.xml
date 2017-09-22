@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="focus_view">130dp</dimen>
+    <dimen name="focus_view_arrows">320dp</dimen>
+</resources>

@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">FuerzaMEXICO</string>
+    <string name="lb_how">Arrastra el marcador para seleccionar</string>
+    <string name="ms_prev">ATRÁS</string>
+    <string name="ms_next">SIGUIENTE</string>
+    <string name="ms_end">COMPLETAR</string>
+    <string name="ms_continue">CONTINUAR</string>
+    <string name="ms_optional">Opcional</string>
+</resources>

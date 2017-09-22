@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "593309657581",
+    "firebase_url": "https://fuerzamexico-ee2c0.firebaseio.com",
+    "project_id": "fuerzamexico-ee2c0",
+    "storage_bucket": "fuerzamexico-ee2c0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:593309657581:android:49a7fbf5ce9d3575",
+        "android_client_info": {
+          "package_name": "com.coders.fuerzamexico"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "593309657581-m931koiibl9ofvsd0b564fmdpf18vvrq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAfXQVmWNqpbmZ4GTB9-aseXTLbZv1-hVY"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
