@@ -76,7 +76,7 @@
                     android:gravity="left"
                     android:textColor="#000"
                     android:fontFamily="sans-serif-light"
-                    android:text="Teléfono"/>
+                    android:text="Teléfono (Opcional)"/>
 
                 <EditText
                     android:id="@+id/txtPhone"
@@ -115,7 +115,7 @@
                     android:gravity="left"
                     android:textColor="#000"
                     android:fontFamily="sans-serif-light"
-                    android:text="Correo electrónico"/>
+                    android:text="Correo electrónico (Opcional)"/>
 
                 <EditText
                     android:id="@+id/txtEmail"

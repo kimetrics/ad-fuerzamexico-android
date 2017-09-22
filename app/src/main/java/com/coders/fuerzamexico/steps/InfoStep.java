@@ -37,6 +37,8 @@ public class InfoStep extends AbstractStep {
         ((TextView)v.findViewById(R.id.lbCity)).setText(address.getSubAdminArea());
         ((TextView)v.findViewById(R.id.lbAddress)).setText(address.getAddressLine(0));
 
+        mStepper.getExtras().putParcelable("ADDRESS", address);
+
         return v;
     }
 

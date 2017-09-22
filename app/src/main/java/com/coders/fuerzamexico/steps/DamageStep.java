@@ -35,7 +35,6 @@ public class DamageStep extends AbstractStep {
     private ArrayList<SingleItem> items;
     private SingleItemAdapter adapter;
     private RecyclerView damageList;
-    private ArrayList<Integer> damageSelections = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -64,14 +63,6 @@ public class DamageStep extends AbstractStep {
                     SingleItem mItem = iterator.next();
                     if(item.getTitle().equals(mItem.getTitle())){
                         mItem.setSelected(!mItem.isSelected());
-                        if(mItem.isSelected()){
-                            if(!damageSelections.contains(mItem.getId())){
-                                damageSelections.add(mItem.getId());
-                            }
-                        }else{
-                            damageSelections.remove(mItem.getIcon());
-                        }
-
                         adapter.notifyDataSetChanged();
                     }
                 }
@@ -84,6 +75,6 @@ public class DamageStep extends AbstractStep {
     @Override
     public void onNext() {
         super.onNext();
-        mStepper.getExtras().putIntegerArrayList("DAMAGE_SELECTIONS", damageSelections);
+        mStepper.getExtras().putParcelableArrayList("DAMAGE_SELECTIONS", items);
     }
 }

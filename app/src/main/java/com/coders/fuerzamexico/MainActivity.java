@@ -16,6 +16,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.coders.fuerzamexico.steps.RootStepper;
+import com.firebase.geofire.GeoFire;
+import com.firebase.geofire.GeoLocation;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
@@ -26,6 +28,9 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.nanotasks.BackgroundWork;
 import com.nanotasks.Completion;
 import com.nanotasks.Tasks;
@@ -80,8 +85,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if(currentAddress != null){
-                    startActivity(new Intent(getApplicationContext(),
-                            RootStepper.class).putExtra("ADDRESS", currentAddress));
+                    startActivityForResult(new Intent(getApplicationContext(),
+                            RootStepper.class).putExtra("ADDRESS", currentAddress)
+                            .putExtra("LOCATION", currentLocation), 10001);
                 }else{
                     Toast.makeText(MainActivity.this, "Selecciona la ubicación del reporte", Toast.LENGTH_SHORT).show();
                 }
@@ -215,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
 
             // Should we show an explanation?
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                    Manifest.permission.ACCESS_COARSE_LOCATION)) {
+                    Manifest.permission.ACCESS_FINE_LOCATION)) {
 
                 // Show an expanation to the user *asynchronously* -- don't block
                 // this thread waiting for the user's response! After the user
@@ -235,4 +241,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(resultCode == 10001 && requestCode == 10001){
+            finish();
+        }
+    }
 }
