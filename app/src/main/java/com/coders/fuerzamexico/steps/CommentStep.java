@@ -17,8 +17,11 @@ import com.coders.fuerzamexico.steps.singleadapter.SingleItem;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.github.fcannizzaro.materialstepper.AbstractStep;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.joda.time.DateTime;
 
@@ -47,6 +50,23 @@ public class CommentStep extends AbstractStep{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.step_comments, container, false);
         txtComments = v.findViewById(R.id.txtComments);
+        if(getArguments().containsKey("UUID")){
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            final DatabaseReference damageReference = database.getReference("reports")
+                    .child(getArguments().getString("UUID")).child("form").child("comments");
+            damageReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    String comments = dataSnapshot.getValue().toString();
+                    txtComments.setText(comments);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
         return v;
     }
 
@@ -60,39 +80,45 @@ public class CommentStep extends AbstractStep{
         int numDead = mStepper.getExtras().getInt("NUM_DEAD");
         ArrayList<IncidenceItem> incidences = mStepper.getExtras().getParcelableArrayList("INCIDENCES");
         int status = mStepper.getExtras().getInt("STATUS");
-        Address addressInfo = mStepper.getExtras().getParcelable("ADDRESS");
-
-        String name = mStepper.getExtras().getString("NAME");
-        String email = mStepper.getExtras().getString("EMAIL");
-        String phone = mStepper.getExtras().getString("PHONE");
-
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference reportsRef = database.getReference("reports");
         String uuid = UUID.randomUUID().toString();
 
-        GeoFire geoFire = new GeoFire(reportsRef);
-        geoFire.setLocation(uuid,
-                new GeoLocation(addressInfo.getLatitude(), addressInfo.getLongitude()));
+        if(getArguments().containsKey("UUID")){
+            uuid = getArguments().getString("UUID");
+        }
 
         reportsRef = reportsRef.child(uuid);
 
-        DatabaseReference addressRef = reportsRef.child("address");
-        addressRef.child("state").setValue(addressInfo.getAdminArea());
-        addressRef.child("city").setValue(addressInfo.getSubAdminArea());
-        addressRef.child("address_name").setValue(addressInfo.getAddressLine(0));
-        addressRef.child("cp").setValue(addressInfo.getPostalCode());
+        if(mStepper.getExtras().containsKey("ADDRESS")) {
+            Address addressInfo = mStepper.getExtras().getParcelable("ADDRESS");
+            GeoFire geoFire = new GeoFire(reportsRef);
+            geoFire.setLocation(uuid,
+                    new GeoLocation(addressInfo.getLatitude(), addressInfo.getLongitude()));
 
-        DatabaseReference userRef = reportsRef.child("reported_by");
-        userRef.child("name").setValue(name);
-        userRef.child("email").setValue(email);
-        userRef.child("phone").setValue(phone);
+            DatabaseReference addressRef = reportsRef.child("address");
+            addressRef.child("state").setValue(addressInfo.getAdminArea());
+            addressRef.child("city").setValue(addressInfo.getSubAdminArea());
+            addressRef.child("address_name").setValue(addressInfo.getAddressLine(0));
+            addressRef.child("cp").setValue(addressInfo.getPostalCode());
+        }
+
+        if(mStepper.getExtras().containsKey("NAME")) {
+            String name = mStepper.getExtras().getString("NAME");
+            String email = mStepper.getExtras().getString("EMAIL");
+            String phone = mStepper.getExtras().getString("PHONE");
+
+            DatabaseReference userRef = reportsRef.child("reported_by");
+            userRef.child("name").setValue(name);
+            userRef.child("email").setValue(email);
+            userRef.child("phone").setValue(phone);
+        }
 
         reportsRef.child("time").setValue(new DateTime().toString());
         reportsRef.child("status").setValue(status);
 
         DatabaseReference formRef = reportsRef.child("form");
-
 
         Iterator<SingleItem> damages = damageSelections.iterator();
         while (damages.hasNext()){
@@ -103,7 +129,7 @@ public class CommentStep extends AbstractStep{
         Iterator<IncidenceItem> iterator = incidences.iterator();
         while (iterator.hasNext()){
             IncidenceItem incidenceItem = iterator.next();
-            formRef.child(incidenceItem.getTitle()).setValue(incidenceItem.isSelected());
+            formRef.child("incident").child(incidenceItem.getTitle()).setValue(incidenceItem.isSelected());
         }
 
         formRef.child("victims").setValue(numVic);

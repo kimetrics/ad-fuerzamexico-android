@@ -11,6 +11,11 @@ import android.widget.LinearLayout;
 
 import com.coders.fuerzamexico.R;
 import com.github.fcannizzaro.materialstepper.AbstractStep;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 /**
@@ -53,42 +58,83 @@ public class StatusStep extends AbstractStep {
         btStatusSuccess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                statusSelected = 1;
-                Picasso.with(getActivity()).load(R.drawable.success_enabled).into(imgStatusSuccess);
-                Picasso.with(getActivity()).load(R.drawable.engineer_disabled).into(imgStatusInProcess);
-                Picasso.with(getActivity()).load(R.drawable.error_disabled).into(imgStatusIncomplete);
-                imgStatusSuccess.setColorFilter(0);
-                imgStatusInProcess.setColorFilter(getResources().getColor(R.color.colorDisabled));
-                imgStatusIncomplete.setColorFilter(getResources().getColor(R.color.colorDisabled));
+                checkSuccess();
             }
         });
 
         btStatusInProcess.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                statusSelected = 2;
-                Picasso.with(getActivity()).load(R.drawable.success_disabled).into(imgStatusSuccess);
-                Picasso.with(getActivity()).load(R.drawable.engineer_enabled).into(imgStatusInProcess);
-                Picasso.with(getActivity()).load(R.drawable.error_disabled).into(imgStatusIncomplete);
-                imgStatusInProcess.setColorFilter(0);
-                imgStatusSuccess.setColorFilter(getResources().getColor(R.color.colorDisabled));
-                imgStatusIncomplete.setColorFilter(getResources().getColor(R.color.colorDisabled));
+                checkInProcess();
             }
         });
 
         btStatusIncomplete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                statusSelected = 3;
-                Picasso.with(getActivity()).load(R.drawable.error_enabled).into(imgStatusIncomplete);
-                Picasso.with(getActivity()).load(R.drawable.success_disabled).into(imgStatusSuccess);
-                Picasso.with(getActivity()).load(R.drawable.engineer_disabled).into(imgStatusInProcess);
-                imgStatusIncomplete.setColorFilter(0);
-                imgStatusSuccess.setColorFilter(getResources().getColor(R.color.colorDisabled));
-                imgStatusInProcess.setColorFilter(getResources().getColor(R.color.colorDisabled));
+           checkIncomplete();
             }
         });
+
+        if(getArguments().containsKey("UUID")){
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            final DatabaseReference damageReference = database.getReference("reports")
+                    .child(getArguments().getString("UUID")).child("status");
+            damageReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    long status = (long) dataSnapshot.getValue();
+                    switch ((int)status){
+                        case 1:
+                            checkSuccess();
+                            break;
+                        case 2:
+                            checkInProcess();
+                            break;
+                        case 3:
+                            checkIncomplete();
+                            break;
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
+
         return v;
+    }
+
+    private void checkIncomplete(){
+        statusSelected = 3;
+        Picasso.with(getActivity()).load(R.drawable.error_enabled).into(imgStatusIncomplete);
+        Picasso.with(getActivity()).load(R.drawable.success_disabled).into(imgStatusSuccess);
+        Picasso.with(getActivity()).load(R.drawable.engineer_disabled).into(imgStatusInProcess);
+        imgStatusIncomplete.setColorFilter(0);
+        imgStatusSuccess.setColorFilter(getResources().getColor(R.color.colorDisabled));
+        imgStatusInProcess.setColorFilter(getResources().getColor(R.color.colorDisabled));
+    }
+
+    private void checkInProcess(){
+        statusSelected = 2;
+        Picasso.with(getActivity()).load(R.drawable.success_disabled).into(imgStatusSuccess);
+        Picasso.with(getActivity()).load(R.drawable.engineer_enabled).into(imgStatusInProcess);
+        Picasso.with(getActivity()).load(R.drawable.error_disabled).into(imgStatusIncomplete);
+        imgStatusInProcess.setColorFilter(0);
+        imgStatusSuccess.setColorFilter(getResources().getColor(R.color.colorDisabled));
+        imgStatusIncomplete.setColorFilter(getResources().getColor(R.color.colorDisabled));
+    }
+
+    private void checkSuccess(){
+        statusSelected = 1;
+        Picasso.with(getActivity()).load(R.drawable.success_enabled).into(imgStatusSuccess);
+        Picasso.with(getActivity()).load(R.drawable.engineer_disabled).into(imgStatusInProcess);
+        Picasso.with(getActivity()).load(R.drawable.error_disabled).into(imgStatusIncomplete);
+        imgStatusSuccess.setColorFilter(0);
+        imgStatusInProcess.setColorFilter(getResources().getColor(R.color.colorDisabled));
+        imgStatusIncomplete.setColorFilter(getResources().getColor(R.color.colorDisabled));
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.coders.fuerzamexico;
 
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Address;
@@ -9,12 +10,16 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.coders.fuerzamexico.models.ClusterMarker;
 import com.coders.fuerzamexico.models.Report;
+import com.coders.fuerzamexico.steps.RootStepper;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
@@ -35,6 +40,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.maps.android.clustering.ClusterManager;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -137,7 +143,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 @Override
                 public boolean onClusterItemClick(ClusterMarker clusterMarker) {
                     String mUUID = clusterMarker.getSomeID();
-
+                    showDialogInfo(mUUID);
                     return true;
                 }
             });
@@ -149,6 +155,55 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
+    private void showDialogInfo(final String uuid){
+        final Dialog d = new Dialog(this);
+        d.setContentView(R.layout.marker_dialog);
+        d.setCancelable(true);
+
+        final TextView lbAddress = d.findViewById(R.id.lbAddress);
+        final ImageView imgStatus = d.findViewById(R.id.imgStatus);
+        final TextView lbStatus = d.findViewById(R.id.lbStatus);
+        TextView btEdit = d.findViewById(R.id.btEdit);
+        btEdit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                d.dismiss();
+                startActivity(new Intent(getApplicationContext(),
+                        RootStepper.class).putExtra("UUID", uuid));
+            }
+        });
+
+        final FirebaseDatabase database = FirebaseDatabase.getInstance();
+        final DatabaseReference reportsRef = database.getReference("reports");
+        reportsRef.child(uuid).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                DataSnapshot addressChild = dataSnapshot.child("address");
+                lbAddress.setText(addressChild.child("address_name").getValue().toString());
+                long status = (long) dataSnapshot.child("status").getValue();
+                switch ((int)status){
+                    case 1:
+                        Picasso.with(getApplicationContext()).load(R.drawable.success_enabled).into(imgStatus);
+                        lbStatus.setText("Atendida");
+                        break;
+                    case 2:
+                        Picasso.with(getApplicationContext()).load(R.drawable.engineer_enabled).into(imgStatus);
+                        lbStatus.setText("En proceso");
+                        break;
+                    case 3:
+                        Picasso.with(getApplicationContext()).load(R.drawable.error_enabled).into(imgStatus);
+                        lbStatus.setText("No atendida");
+                        break;
+                }
+                d.show();
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+    }
 
     private void queryGeo(){
         if(currentLocation != null) {

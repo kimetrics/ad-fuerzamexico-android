@@ -12,9 +12,16 @@ import com.coders.fuerzamexico.R;
 import com.coders.fuerzamexico.steps.incidence.IncidenceAdapter;
 import com.coders.fuerzamexico.steps.incidence.IncidenceItem;
 import com.coders.fuerzamexico.steps.incidence.OnIncidenceClickListener;
+import com.coders.fuerzamexico.steps.singleadapter.SingleItem;
 import com.github.fcannizzaro.materialstepper.AbstractStep;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 /**
@@ -47,36 +54,61 @@ public class IncidenceStep extends AbstractStep {
 
     private void loadList(){
         items = new ArrayList<>();
-        IncidenceItem i1 = new IncidenceItem(R.drawable.hold, "Voluntarios",
-                "Se necesitan manos para ayudar", false);
-        items.add(i1);
 
-        IncidenceItem i2 = new IncidenceItem(R.drawable.light, "Energía eléctrica",
-                "Ayuda para que se reestablezca la energía eléctrica", false);
-        items.add(i2);
+        items.add(new IncidenceItem(R.drawable.hold, "Voluntarios",
+                "Se necesitan manos para ayudar", false));
 
-        IncidenceItem i3 = new IncidenceItem(R.drawable.meat, "Víveres",
-                "Necesidad de alimentos, productos de higiene, etc.", false);
-        items.add(i3);
+        items.add(new IncidenceItem(R.drawable.light, "Energía eléctrica",
+                "Ayuda para que se reestablezca la energía eléctrica", false));
 
-        IncidenceItem i5 = new IncidenceItem(R.drawable.emergency_kit, "Medicamentos",
-                "Medicinas como Alcohol, Oxígeno, Dropamina, etc.", false);
-        items.add(i5);
+        items.add(new IncidenceItem(R.drawable.meat, "Víveres",
+                "Necesidad de alimentos, productos de higiene, etc.", false));
 
-        IncidenceItem i6 = new IncidenceItem(R.drawable.heart, "Rescate",
-                "Gente atrapada entre escombros", false);
-        items.add(i6);
+        items.add(new IncidenceItem(R.drawable.emergency_kit, "Medicamentos",
+                "Medicinas como Alcohol, Oxígeno, Dropamina, etc.", false));
 
-        IncidenceItem i7 = new IncidenceItem(R.drawable.tools, "Herramientas",
-                "Herramientas y material de construcción", false);
-        items.add(i7);
-        IncidenceItem i8 = new IncidenceItem(R.drawable.loader, "Maquinaria",
-                "Necesidad de remover grandes cantidades de escombros", false);
-        items.add(i8);
+        items.add(new IncidenceItem(R.drawable.heart, "Rescate",
+                "Gente atrapada entre escombros", false));
 
-        IncidenceItem i9 = new IncidenceItem(R.drawable.bus, "Transporte",
-                "Transportar personas", false);
-        items.add(i9);
+        items.add(new IncidenceItem(R.drawable.tools, "Herramientas",
+                "Herramientas y material de construcción", false));
+        items.add(new IncidenceItem(R.drawable.loader, "Maquinaria",
+                "Necesidad de remover grandes cantidades de escombros", false));
+
+        items.add(new IncidenceItem(R.drawable.bus, "Transporte",
+                "Transportar personas", false));
+
+        if(getArguments().containsKey("UUID")){
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            final DatabaseReference damageReference = database.getReference("reports")
+                    .child(getArguments().getString("UUID")).child("form").child("incident");
+            damageReference.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    HashMap<String, Boolean> data = (HashMap<String, Boolean>) dataSnapshot.getValue();
+                    Iterator<String> iterator = data.keySet().iterator();
+                    while (iterator.hasNext()){
+                        String title = iterator.next();
+                        boolean isSelected = data.get(title);
+
+                        Iterator<IncidenceItem> mIterator = items.iterator();
+                        while (mIterator.hasNext()){
+                            IncidenceItem mItem = mIterator.next();
+                            if(title.equals(mItem.getTitle())){
+                                mItem.setSelected(isSelected);
+                            }
+                        }
+                    }
+
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        }
 
         adapter = new IncidenceAdapter(getActivity(), items, new OnIncidenceClickListener() {
             @Override

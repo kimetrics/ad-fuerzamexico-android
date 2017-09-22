@@ -8,6 +8,11 @@ import android.widget.EditText;
 
 import com.coders.fuerzamexico.R;
 import com.github.fcannizzaro.materialstepper.AbstractStep;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 /**
  * Created by usuario on 21/09/17.
@@ -34,6 +39,49 @@ public class DemographicStep extends AbstractStep{
         txtNumHabitants = v.findViewById(R.id.txtNumHabitants);
         txtNumVictims = v.findViewById(R.id.txtNumVictims);
         txtNumDead = v.findViewById(R.id.txtNumDead);
+
+        if(getArguments().containsKey("UUID")){
+            final FirebaseDatabase database = FirebaseDatabase.getInstance();
+            final DatabaseReference damageReference = database.getReference("reports")
+                    .child(getArguments().getString("UUID")).child("form");
+
+            damageReference.child("dead").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    txtNumDead.setText(dataSnapshot.getValue().toString());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            damageReference.child("hab").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    txtNumHabitants.setText(dataSnapshot.getValue().toString());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+            damageReference.child("victims").addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    txtNumVictims.setText(dataSnapshot.getValue().toString());
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+
+        }
         return v;
     }
 
@@ -55,8 +103,8 @@ public class DemographicStep extends AbstractStep{
             numDead = Integer.parseInt(txtNumDead.getText().toString());
         }
 
-        getArguments().putInt("NUM_HAB", numHab);
-        getArguments().putInt("NUM_VIC", numVic);
-        getArguments().putInt("NUM_DEAD", numDead);
+        mStepper.getExtras().putInt("NUM_HAB", numHab);
+        mStepper.getExtras().putInt("NUM_VIC", numVic);
+        mStepper.getExtras().putInt("NUM_DEAD", numDead);
     }
 }
