@@ -15,6 +15,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -23,7 +25,10 @@ import android.widget.TextView;
 import com.coders.fuerzamexico.models.ClusterMarker;
 import com.coders.fuerzamexico.models.MarkerRenderer;
 import com.coders.fuerzamexico.models.Report;
+import com.coders.fuerzamexico.steps.IncidenceStep;
 import com.coders.fuerzamexico.steps.RootStepper;
+import com.coders.fuerzamexico.steps.incidence.IncidenceAdapter;
+import com.coders.fuerzamexico.steps.incidence.IncidenceItem;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
 import com.firebase.geofire.GeoQuery;
@@ -215,7 +220,26 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         final TextView lbAddress = d.findViewById(R.id.lbAddress);
         final ImageView imgStatus = d.findViewById(R.id.imgStatus);
         final TextView lbStatus = d.findViewById(R.id.lbStatus);
+        final RecyclerView incidenceList = d.findViewById(R.id.incidenceList);
+        incidenceList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         TextView btEdit = d.findViewById(R.id.btEdit);
+        TextView btDetails = d.findViewById(R.id.btDetails);
+        TextView btCloseDialog = d.findViewById(R.id.btCloseDialog);
+        btCloseDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(d != null){
+                    d.dismiss();
+                }
+            }
+        });
+        btDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(getApplicationContext(), DetailActivity.class)
+                        .putExtra("UUID", uuid));
+            }
+        });
         btEdit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -233,6 +257,21 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 DataSnapshot addressChild = dataSnapshot.child("address");
                 lbAddress.setText(addressChild.child("address_name").getValue().toString());
                 long status = (long) dataSnapshot.child("status").getValue();
+                HashMap<String, Boolean> dataIncidents
+                        = (HashMap<String, Boolean>) dataSnapshot.child("form").child("incident").getValue();
+
+                Iterator<IncidenceItem> iterator = IncidenceStep.getIncidences().iterator();
+                ArrayList<IncidenceDialogItem> icons = new ArrayList<>();
+                while (iterator.hasNext()){
+                    IncidenceItem item = iterator.next();
+                    if(dataIncidents.get(item.getTitle())){
+                        icons.add(new IncidenceDialogItem(item.getIcon(), item.getTitle()));
+                    }
+                }
+
+                IncidenceDialogAdapter incidenceAdapter = new IncidenceDialogAdapter(getApplicationContext(), icons);
+                incidenceList.setAdapter(incidenceAdapter);
+
                 switch ((int)status){
                     case 1:
                         Picasso.with(getApplicationContext()).load(R.drawable.success_enabled).into(imgStatus);

@@ -5,4 +5,5 @@
     <color name="colorAccent">#FF4081</color>
     <color name="colorDisabled">#B0BEC5</color>
     <color name="colorPosition">#00BCD4</color>
+    <color name="colorYellow">#FFC107</color>
 </resources>

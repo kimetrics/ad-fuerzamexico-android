@@ -50,8 +50,8 @@ public class IncidenceStep extends AbstractStep {
         return v;
     }
 
-    private void loadList(){
-        items = new ArrayList<>();
+    public static ArrayList<IncidenceItem> getIncidences(){
+        ArrayList<IncidenceItem> items = new ArrayList<>();
 
         items.add(new IncidenceItem(R.drawable.hold, "Voluntarios",
                 "Se necesitan manos para ayudar", false));
@@ -75,6 +75,13 @@ public class IncidenceStep extends AbstractStep {
 
         items.add(new IncidenceItem(R.drawable.bus, "Transporte",
                 "Transportar personas", false));
+
+        return items;
+    }
+
+    private void loadList(){
+
+        items = IncidenceStep.getIncidences();
 
         if(getArguments().containsKey("UUID")){
             final FirebaseDatabase database = FirebaseDatabase.getInstance();

@@ -4,62 +4,137 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:padding="20dp">
+
+        <ImageView
+            android:id="@+id/imgStatus"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:src="@drawable/success_enabled"/>
+
+        <TextView
+            android:id="@+id/lbStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:padding="5dp"
+            android:fontFamily="sans-serif-condensed"
+            android:text="Atendido"/>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/incidenceList"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+
     <TextView
         android:id="@+id/lbAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="10dp"
         android:textSize="18sp"
-        android:text="asdasdasdasdasd"/>
+        android:gravity="center"
+        android:fontFamily="sans-serif-condensed"
+        android:text="- - - - - -"/>
 
     <LinearLayout
-        android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:padding="10dp">
-
-        <ImageView
-            android:id="@+id/imgStatus"
-            android:layout_width="36dp"
-            android:layout_height="36dp"
-            android:src="@drawable/success_enabled"/>
-
-        <TextView
-            android:id="@+id/lbStatus"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:gravity="center|left"
-            android:paddingLeft="10dp"
-            android:textSize="18sp"
-            android:fontFamily="sans-serif-condensed"
-            android:text="Atendido"/>
-
-    </LinearLayout>
-
-    <LinearLayout
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="48dp">
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginBottom="10dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp">
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:background="@color/colorPrimary">
+        <LinearLayout
+            android:visibility="gone"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_margin="5dp"
+            android:layout_height="48dp">
 
-            <TextView
-                android:id="@+id/btEdit"
-                android:layout_width="match_parent"
+            <FrameLayout
+                android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:textColor="#FFF"
-                android:fontFamily="sans-serif-medium"
-                android:background="?attr/selectableItemBackground"
-                android:text="EDITAR"/>
+                android:background="@color/colorPosition">
 
-        </FrameLayout>
+                <TextView
+                    android:id="@+id/btDetails"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="#FFF"
+                    android:fontFamily="sans-serif-medium"
+                    android:background="?attr/selectableItemBackground"
+                    android:text="DETALLES"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_margin="5dp"
+            android:layout_height="48dp">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@color/colorYellow">
+
+                <TextView
+                    android:id="@+id/btEdit"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="#FFF"
+                    android:fontFamily="sans-serif-medium"
+                    android:background="?attr/selectableItemBackground"
+                    android:text="EDITAR"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_margin="5dp"
+            android:layout_height="48dp">
+
+            <FrameLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/btCloseDialog"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:textColor="#000"
+                    android:fontFamily="sans-serif-medium"
+                    android:background="?attr/selectableItemBackground"
+                    android:text="CERRAR"/>
+
+            </FrameLayout>
+
+        </LinearLayout>
 
     </LinearLayout>
 
