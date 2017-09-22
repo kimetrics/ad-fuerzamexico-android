@@ -1,5 +1,8 @@
 package com.coders.fuerzamexico.models;
 
+import android.graphics.Bitmap;
+import android.support.annotation.DrawableRes;
+
 import com.google.android.gms.maps.model.LatLng;
 import com.google.maps.android.clustering.ClusterItem;
 
@@ -8,12 +11,28 @@ import com.google.maps.android.clustering.ClusterItem;
  */
 
 public class ClusterMarker implements ClusterItem {
-    private final LatLng mPosition;
+    private LatLng location;
     private String someID;
+    private Bitmap icon;
+    private int status;
 
-    public ClusterMarker(double lat, double lng, String id) {
-        mPosition = new LatLng(lat, lng);
-        someID = id;
+    public ClusterMarker(LatLng location, String someID, Bitmap icon, int status) {
+        this.location = location;
+        this.someID = someID;
+        this.icon = icon;
+        this.status = status;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public LatLng getLocation() {
+        return location;
     }
 
     public String getSomeID() {
@@ -24,8 +43,16 @@ public class ClusterMarker implements ClusterItem {
         this.someID = someID;
     }
 
+    public Bitmap getIcon() {
+        return icon;
+    }
+
+    public void setIcon(Bitmap icon) {
+        this.icon = icon;
+    }
+
     @Override
     public LatLng getPosition() {
-        return mPosition;
+        return location;
     }
 }

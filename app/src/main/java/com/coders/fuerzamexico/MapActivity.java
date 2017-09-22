@@ -5,6 +5,8 @@ import android.Manifest;
 import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -19,6 +21,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.coders.fuerzamexico.models.ClusterMarker;
+import com.coders.fuerzamexico.models.MarkerRenderer;
 import com.coders.fuerzamexico.models.Report;
 import com.coders.fuerzamexico.steps.RootStepper;
 import com.firebase.geofire.GeoFire;
@@ -123,6 +126,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mMap = googleMap;
         mapReady = true;
         mClusterManager = new ClusterManager<ClusterMarker>(this, mMap);
+        mClusterManager.setRenderer(new MarkerRenderer(this, mMap, mClusterManager));
         mMap.setOnMarkerClickListener(mClusterManager);
         mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
             @Override
@@ -160,12 +164,28 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private ArrayList<String> markers = new ArrayList<>();
     ClusterManager<ClusterMarker> mClusterManager;
 
-    private void addMarker(Report report, String uuid){
+    private void addMarker(Report report, String uuid, int status){
         if(mapReady){
+
+            /*int icon = R.drawable.engineer;
+
+            switch (status){
+                case 1:
+                    icon = R.drawable.success;
+                    break;
+                case 2:
+                    icon = R.drawable.engineer;
+                    break;
+                case 3:
+                    icon = R.drawable.error;
+                    break;
+            }
+
+            Bitmap bm = BitmapFactory.decodeResource(getResources(), icon);*/
 
             if(!markers.contains(uuid)) {
                 final ClusterMarker clusterMarker =
-                        new ClusterMarker(report.getGeo().latitude, report.getGeo().longitude, uuid);
+                        new ClusterMarker(new LatLng(report.getGeo().latitude, report.getGeo().longitude), uuid, null, status);
                 mClusterManager.addItem(clusterMarker);
                 markers.add(uuid);
                 lbVisualizations.setText("Incidencias visualizadas: " + String.valueOf(markers.size()));
@@ -258,7 +278,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                             try{
                                 Report report = new Report(dataMap);
                                 reports.add(report);
-                                addMarker(report, key);
+                                addMarker(report, key, (int)(long)dataSnapshot.child("status").getValue());
                             }catch (ClassCastException e){
                                 e.printStackTrace();
                             }
