@@ -20,3 +20,12 @@ Colaboradores
 * Erik Rivera <erik@kimetrics.com>
 
 Gracias a Kimetrics que está donando tiempo de desarrollo para este proyecto.
+
+# Capturas de pantalla
+![Paso 1](screenshots/paso1.png)
+![Paso 2](screenshots/paso2.png)
+![Paso 3](screenshots/paso3.png)
+![Paso 4](screenshots/paso4.png)
+![Paso 5](screenshots/paso5.png)
+![Paso 6](screenshots/paso6.png)
+![Paso 7](screenshots/paso7.png)
