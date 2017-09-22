@@ -1,6 +1,7 @@
 package com.coders.fuerzamexico.steps;
 
 import android.location.Address;
+import android.location.Location;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import com.coders.fuerzamexico.steps.incidence.IncidenceItem;
 import com.coders.fuerzamexico.steps.singleadapter.SingleItem;
 import com.firebase.geofire.GeoFire;
 import com.firebase.geofire.GeoLocation;
+import com.firebase.geofire.LocationCallback;
 import com.github.fcannizzaro.materialstepper.AbstractStep;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -20,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import org.joda.time.DateTime;
+import org.joda.time.LocalDate;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -85,14 +88,26 @@ public class CommentStep extends AbstractStep{
             uuid = getArguments().getString("UUID");
         }
 
+        Location location = null;
+
+        if(getArguments().containsKey("LOCATION")){
+            location = getArguments().getParcelable("LOCATION");
+        }
+
+        if(mStepper.getExtras().containsKey("ADDRESS")) {
+            Address addressInfo = mStepper.getExtras().getParcelable("ADDRESS");
+            Location l = new Location("");
+            l.setLatitude(addressInfo.getLatitude());
+            l.setLongitude(addressInfo.getLongitude());
+        }
+
+        GeoFire geoFire = new GeoFire(reportsRef);
+        geoFire.setLocation(uuid, new GeoLocation(location.getLatitude(), location.getLongitude()));
+
         reportsRef = reportsRef.child(uuid);
 
         if(mStepper.getExtras().containsKey("ADDRESS")) {
             Address addressInfo = mStepper.getExtras().getParcelable("ADDRESS");
-            GeoFire geoFire = new GeoFire(reportsRef);
-            geoFire.setLocation(uuid,
-                    new GeoLocation(addressInfo.getLatitude(), addressInfo.getLongitude()));
-
             DatabaseReference addressRef = reportsRef.child("address");
             addressRef.child("state").setValue(addressInfo.getAdminArea());
             addressRef.child("city").setValue(addressInfo.getSubAdminArea());

@@ -266,7 +266,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
                         @Override
                         public void onCancelled(DatabaseError databaseError) {
-
+                            databaseError.toException().printStackTrace();
                         }
                     });
                 }

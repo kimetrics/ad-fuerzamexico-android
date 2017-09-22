@@ -43,6 +43,10 @@ public class RootStepper extends DotStepper {
             b.putString("UUID", b1.getString("UUID"));
         }
 
+        if(b1.containsKey("LOCATION")){
+            b.putParcelable("LOCATION", b1.getParcelable("LOCATION"));
+        }
+
         fragment.setArguments(b);
         return fragment;
     }

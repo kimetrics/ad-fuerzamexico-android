@@ -44,9 +44,9 @@ public class UserStep extends AbstractStep {
     @Override
     public boolean nextIf() {
         boolean isValid = txtName.getText().toString().length() > 4;
-        isEmailValid = isEmailValid(txtEmail.getText().toString());
 
         if(!txtEmail.getText().toString().isEmpty()){
+            isEmailValid = isEmailValid(txtEmail.getText().toString());
             isValid = isEmailValid;
         }
 
