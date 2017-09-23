@@ -312,7 +312,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             final DatabaseReference reportsRef = database.getReference("reports");
             GeoFire geoFire = new GeoFire(reportsRef);
             GeoQuery geoQuery = geoFire.queryAtLocation(new GeoLocation(currentLocation.getLatitude(),
-                    currentLocation.getLongitude()), 1);
+                    currentLocation.getLongitude()), 150);
 
             geoQuery.addGeoQueryEventListener(new GeoQueryEventListener() {
                 @Override
